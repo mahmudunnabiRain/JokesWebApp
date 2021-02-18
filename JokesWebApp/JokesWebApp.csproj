@@ -6,6 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20210218152841_Add Author on Joke Model.cs" />
+    <Compile Remove="Data\Migrations\20210218152841_Add Author on Joke Model.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210218163424_fix.cs" />
+    <Compile Remove="Data\Migrations\20210218163424_fix.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210218163636_fix2.cs" />
+    <Compile Remove="Data\Migrations\20210218163636_fix2.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.11" />

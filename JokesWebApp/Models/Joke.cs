@@ -19,6 +19,8 @@ namespace JokesWebApp.Models
         [Display(Name = "Joke Answer")]
         public string JokeAnswer { get; set; }
 
+        public string Author { get; set; }
+
         public Joke()
         {
                 
