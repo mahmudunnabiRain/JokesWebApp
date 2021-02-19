@@ -21,6 +21,9 @@ namespace JokesWebApp.Models
 
         public string Author { get; set; }
 
+        [Display(Name = "Created At")]
+        public DateTime CreatedAt { get; set; }
+
         public Joke()
         {
                 

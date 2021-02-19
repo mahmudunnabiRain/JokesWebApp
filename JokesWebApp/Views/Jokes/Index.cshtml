@@ -1,43 +1,91 @@
-﻿@model IEnumerable<JokesWebApp.Models.Joke>
+﻿@*@model IEnumerable<JokesWebApp.Models.Joke>*@
+@model PaginatedList<JokesWebApp.Models.Joke>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<form asp-action="Search" method="get">
+    <div class="form-actions no-color">
+        <p>
+            <div class="d-inline float-left">
+                <div class="btn-group">
+                    <a asp-action="Create" class="btn btn-outline-info btn-sm">Create New</a>
+                    <a asp-action="Index" class="btn btn-outline-info btn-sm">Show All</a>
+                </div>
+            </div>
+            <div class="d-inline float-right">
+                <div class="input-group mb-2">
+                    <input type="text" name="SearchPhrase" />
+                    <div class="input-group-append">
+                        <input type="submit" value="Search" class="btn btn-outline-info btn-sm" />
+                    </div>                  
+                </div>
+            </div>
+            
+        </p>
+    </div>
+</form>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.JokeQuestion)
+                @*@Html.DisplayNameFor(model => model.JokeQuestion)*@
+                Joke Question
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Author)
+                @*@Html.DisplayNameFor(model => model.Author)*@
+                Author
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.CreatedAt)*@
+                Created At
             </th>
 
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.JokeQuestion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Author)
-            </td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.JokeQuestion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
 
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<div class="btn-group">
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       class="btn btn-outline-info btn-sm @prevDisabled">
+        Previous
+    </a>
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       class="btn btn-outline-info btn-sm @nextDisabled">
+        Next
+    </a>
+</div>
+

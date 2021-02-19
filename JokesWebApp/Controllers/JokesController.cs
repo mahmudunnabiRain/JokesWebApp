@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace JokesWebApp.Controllers
 {
@@ -17,21 +18,19 @@ namespace JokesWebApp.Controllers
         }
 
         // GET: Jokes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pageNumber)
         {
-            return View(await _context.Joke.ToListAsync());
+            int pageSize = 10;
+            return View(await PaginatedList<Joke>.CreateAsync(_context.Joke.OrderByDescending(j => j.CreatedAt).AsNoTracking(), pageNumber ?? 1, pageSize));
+            //return View(await _context.Joke.OrderByDescending(j => j.CreatedAt).ToListAsync());
         }
 
-        // GET: Jokes/ShowSearchForm
-        public async Task<IActionResult> ShowSearchForm()
+        // GET: Jokes/Search
+        public async Task<IActionResult> Search(string searchPhrase, int? pageNumber)
         {
-            return View();
-        }
-
-        // POST: Jokes/ShowSearchResults
-        public async Task<IActionResult> ShowSearchResults(string SearchPhrase)
-        {
-            return View("Index", await _context.Joke.Where( j => j.JokeQuestion.Contains(SearchPhrase)).ToListAsync());
+            int pageSize = 10;
+            return View("Index", await PaginatedList<Joke>.CreateAsync(_context.Joke.Where(j => j.JokeQuestion.Contains(searchPhrase)).OrderByDescending(j => j.CreatedAt).AsNoTracking(), pageNumber ?? 1, pageSize));
+            //return View("Index", await _context.Joke.Where( j => j.JokeQuestion.Contains(SearchPhrase)).OrderByDescending(j => j.CreatedAt).ToListAsync());
         }
 
         // GET: Jokes/Details/5
@@ -70,6 +69,7 @@ namespace JokesWebApp.Controllers
             if (ModelState.IsValid)
             {
                 joke.Author = User.Identity.Name;
+                joke.CreatedAt = DateTime.Now;
                 _context.Add(joke);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -100,7 +100,7 @@ namespace JokesWebApp.Controllers
         [Microsoft.AspNetCore.Authorization.Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,JokeQuestion,JokeAnswer,Author")] Joke joke)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,JokeQuestion,JokeAnswer,Author,CreateAt")] Joke joke)
         {
             if (id != joke.Id)
             {
